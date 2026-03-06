@@ -1,0 +1,57 @@
+.toggle-switch-container {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+}
+
+.toggle-switch-label,
+.toggle-switch-on-label {
+    font-size: 10px;
+    font-weight: 700;
+    color: #777;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.toggle-switch-pip {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #333;
+}
+
+.toggle-switch-pip.active {
+    background: #3eb4ff;
+    box-shadow: 0 0 6px #3eb4ff;
+}
+
+.toggle-switch-track {
+    width: 44px;
+    height: 24px;
+    background: var(--toggle-track, #1a1a1a);
+    border-radius: 12px;
+    position: relative;
+    border: 1px solid var(--toggle-border, rgba(255, 255, 255, 0.05));
+    transition: background 0.3s;
+}
+
+.toggle-switch-container.on .toggle-switch-track {
+    background: var(--toggle-track-on, #111);
+}
+
+.toggle-switch-thumb {
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    width: 16px;
+    height: 16px;
+    background: var(--toggle-thumb, #888);
+    border-radius: 50%;
+    transition: all 0.3s;
+}
+
+.toggle-switch-container.on .toggle-switch-thumb {
+    left: 23px;
+    background: var(--toggle-thumb-on, #3eb4ff);
+}

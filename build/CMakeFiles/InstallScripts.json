@@ -1,0 +1,11 @@
+{
+	"InstallScripts" : 
+	[
+		"/Users/ema/Desktop/osme/Plugins/Messina/build/cmake_install.cmake",
+		"/Users/ema/Desktop/osme/Plugins/Messina/build/JUCE/cmake_install.cmake",
+		"/Users/ema/Desktop/osme/Plugins/Messina/build/JUCE/modules/cmake_install.cmake",
+		"/Users/ema/Desktop/osme/Plugins/Messina/build/JUCE/extras/Build/cmake_install.cmake",
+		"/Users/ema/Desktop/osme/Plugins/Messina/build/JUCE/extras/Build/juceaide/cmake_install.cmake"
+	],
+	"Parallel" : false
+}

@@ -1,0 +1,6 @@
+# Hashes of file build rules.
+b96beb55278c5cbe6f140bef953c0ad8 Messina_artefacts/JuceLibraryCode/JuceHeader.h
+cf443b0d491f4f6cac0b34eb689902fc Messina_artefacts/JuceLibraryCode/Messina_AU/PkgInfo
+8fc17b5e24f17e018b1fc6e4842b2c82 Messina_artefacts/JuceLibraryCode/Messina_Standalone/PkgInfo
+353987fac1629f64fcdb530aaa029909 Messina_artefacts/JuceLibraryCode/Messina_VST3/PkgInfo
+909549018e38aa83cf01a7e5ad7ea03b juce_binarydata_MessinaAssets/JuceLibraryCode/BinaryData1.cpp

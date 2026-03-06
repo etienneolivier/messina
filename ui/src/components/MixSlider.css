@@ -1,0 +1,83 @@
+.mix-slider-container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+    width: 100%;
+}
+
+.mix-label {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 1px;
+    color: #777;
+    text-transform: uppercase;
+}
+
+.mix-track-wrapper {
+    position: relative;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.mix-track {
+    position: relative;
+    height: 8px;
+    flex: 1;
+    background: var(--slider-track, #151515);
+    border-radius: 4px;
+    border: 1px solid var(--slider-border, rgba(255, 255, 255, 0.05));
+    cursor: pointer;
+    touch-action: none;
+}
+
+.mix-fill {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    background: linear-gradient(90deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.15));
+    border-radius: 4px 0 0 4px;
+    pointer-events: none;
+}
+
+.mix-thumb {
+    position: absolute;
+    top: 50%;
+    width: 20px;
+    height: 20px;
+    margin-top: -10px;
+    margin-left: -10px;
+    background: var(--slider-thumb, #888);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 2;
+    transition: background-color 0.2s ease;
+}
+
+.mix-track:hover .mix-thumb {
+    background: var(--slider-thumb-hover, #fff);
+}
+
+.mix-thumb-glow {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 40px;
+    height: 40px;
+    margin-top: -20px;
+    margin-left: -20px;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.3) 0%, rgba(255, 255, 255, 0) 70%);
+    border-radius: 50%;
+    z-index: 1;
+}
+
+.mix-value {
+    font-size: 13px;
+    color: #777;
+    width: 38px;
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+}
