@@ -103,8 +103,8 @@ MessinaAudioProcessorEditor::MessinaAudioProcessorEditor(
 
   webComponent = std::make_unique<juce::WebBrowserComponent>(options);
   addAndMakeVisible(*webComponent);
-  // Use loadFromFile for file:// URLs - more reliable on Windows WebView2
-  webComponent->loadFromFile(uiFile.getFullPathName());
+  juce::URL url(uiFile.getFullPathName());
+  webComponent->goToURL(url);
   setSize(1000, 680);
   // Bind parameters to UI
   juce::StringArray allParams = {
