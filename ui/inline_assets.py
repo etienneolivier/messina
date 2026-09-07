@@ -34,6 +34,9 @@ def inline_assets():
         print(f"Inlining JS from {full_js_path}")
         with open(full_js_path, "r") as f:
             js_content = f.read()
+        
+        # Escape </script> to prevent premature HTML script tag closure
+        js_content = js_content.replace("</script>", "<\\/script>")
             
         html = html.replace(js_match.group(0), "")
         
