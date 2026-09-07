@@ -50,11 +50,6 @@ jobs:
         working-directory: ui
         run: python3 inline_assets.py
 
-      - name: Install CMake
-        uses: jwlawson/actions-cmake@v2
-        with:
-          version: '3.27'
-
       - name: Checkout JUCE submodule
         run: |
           git clone --depth 1 --branch 8.0.12 https://github.com/juce-framework/JUCE.git ../Libs/JUCE
