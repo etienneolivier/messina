@@ -2,8 +2,14 @@ cmake_minimum_required(VERSION 3.22)
 
 project(Messina VERSION 0.0.1 LANGUAGES C CXX)
 
-# Point to local JUCE (downloaded to GitHub/Libs/JUCE)
-add_subdirectory(../../Libs/JUCE JUCE)
+# Point to local JUCE (downloaded to Libs/JUCE or ../Libs/JUCE)
+if(EXISTS "${CMAKE_SOURCE_DIR}/Libs/JUCE")
+    add_subdirectory(Libs/JUCE JUCE)
+elseif(EXISTS "${CMAKE_SOURCE_DIR}/../Libs/JUCE")
+    add_subdirectory(../Libs/JUCE JUCE)
+else()
+    message(FATAL_ERROR "JUCE not found. Please clone JUCE to Libs/JUCE or ../Libs/JUCE")
+endif()
 
 juce_add_plugin(Messina
     COMPANY_NAME "malcolm audio"
