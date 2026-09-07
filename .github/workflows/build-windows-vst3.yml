@@ -75,15 +75,15 @@ jobs:
         with:
           name: Messina-Windows-VST3
           path: |
-            build/Messina_artefacts/VST3/Messina.vst3
+            build/Messina_artefacts/${{ github.event.inputs.build_type || 'Release' }}/VST3/Messina.vst3
           if-no-files-found: error
 
       - name: Create Windows release package
         shell: bash
         run: |
           mkdir -p Messina-Windows-VST3
-          if [ -d "build/Messina_artefacts/VST3/Messina.vst3" ]; then
-            cp -r build/Messina_artefacts/VST3/Messina.vst3 Messina-Windows-VST3/
+          if [ -d "build/Messina_artefacts/${{ github.event.inputs.build_type || 'Release' }}/VST3/Messina.vst3" ]; then
+            cp -r build/Messina_artefacts/${{ github.event.inputs.build_type || 'Release' }}/VST3/Messina.vst3 Messina-Windows-VST3/
           fi
           cp Source/ui.html Messina-Windows-VST3/ui.html 2>/dev/null || true
           cat > Messina-Windows-VST3/README.txt << 'EOF'
