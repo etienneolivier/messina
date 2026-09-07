@@ -52,7 +52,7 @@ jobs:
 
       - name: Checkout JUCE submodule
         run: |
-          git clone --depth 1 --branch 8.0.12 https://github.com/juce-framework/JUCE.git ../Libs/JUCE
+          git clone --depth 1 --branch 8.0.12 https://github.com/juce-framework/JUCE.git Libs/JUCE
 
       - name: Configure CMake (Windows VST3)
         run: |
