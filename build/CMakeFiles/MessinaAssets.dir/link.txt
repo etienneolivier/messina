@@ -1,2 +1,0 @@
-/usr/bin/ar qc libMessinaAssets.a CMakeFiles/MessinaAssets.dir/juce_binarydata_MessinaAssets/JuceLibraryCode/BinaryData1.cpp.o
-/usr/bin/ranlib libMessinaAssets.a
