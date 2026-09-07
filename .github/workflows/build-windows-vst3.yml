@@ -1,0 +1,125 @@
+name: Build Windows VST3
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'Source/**'
+      - 'CMakeLists.txt'
+      - 'ui/**'
+      - '.github/workflows/build-windows-vst3.yml'
+  workflow_dispatch:
+    inputs:
+      build_type:
+        description: 'Build type'
+        required: false
+        default: 'Release'
+        type: choice
+        options:
+          - Release
+          - Debug
+
+jobs:
+  build-windows-vst3:
+    runs-on: windows-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: 'ui/package-lock.json'
+
+      - name: Install npm dependencies (UI)
+        working-directory: ui
+        run: npm ci
+
+      - name: Build React UI
+        working-directory: ui
+        run: npm run build
+
+      - name: Inline UI assets
+        working-directory: ui
+        run: python3 inline_assets.py
+
+      - name: Install CMake
+        uses: jwlawson/actions-cmake@v2
+        with:
+          version: '3.27'
+
+      - name: Checkout JUCE submodule
+        run: |
+          git clone --depth 1 --branch 8.0.12 https://github.com/juce-framework/JUCE.git ../Libs/JUCE
+
+      - name: Configure CMake (Windows VST3)
+        run: |
+          cmake -B build -DCMAKE_BUILD_TYPE=${{ github.event.inputs.build_type || 'Release' }} -DJUCE_COPY_PLUGIN_AFTER_BUILD=OFF
+
+      - name: Build VST3 plugin
+        run: |
+          cmake --build build --config ${{ github.event.inputs.build_type || 'Release' }} --target Messina_VST3 -j
+
+      - name: Verify VST3 output
+        shell: bash
+        run: |
+          echo "Looking for VST3 bundle..."
+          find build -name "*.vst3" -type d
+          echo "Contents of VST3 bundle:"
+          find build -path "*/Messina.vst3/*" -type f
+
+      - name: Upload VST3 artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: Messina-Windows-VST3
+          path: |
+            build/Messina_artefacts/VST3/Messina.vst3
+          if-no-files-found: error
+
+      - name: Create Windows release package
+        shell: bash
+        run: |
+          mkdir -p Messina-Windows-VST3
+          if [ -d "build/Messina_artefacts/VST3/Messina.vst3" ]; then
+            cp -r build/Messina_artefacts/VST3/Messina.vst3 Messina-Windows-VST3/
+          fi
+          cp Source/ui.html Messina-Windows-VST3/ui.html 2>/dev/null || true
+          cat > Messina-Windows-VST3/README.txt << 'EOF'
+          Messina - Granular Vocal Harmonizer
+          ====================================
+          
+          This is the Windows VST3 version of the Messina plugin.
+          
+          Installation:
+          1. Copy the "Messina.vst3" folder to one of these locations:
+             - C:\Program Files\VST3\ (system-wide)
+             - C:\Users\<Your User>\AppData\Roaming\VST3\ (user-specific)
+             - Your DAW's VST3 plugins folder
+          2. Restart your DAW
+          3. Look for "Messina" in your DAW's plugin list
+          
+          Requirements:
+          - Windows 10 or later (64-bit)
+          - A VST3-compatible DAW
+          - Microsoft Edge WebView2 Runtime (pre-installed on Windows 10/11)
+          
+          Note: The UI uses Microsoft Edge WebView2 for rendering.
+          If the UI doesn't load, install WebView2 from:
+          https://developer.microsoft.com/en-us/microsoft-edge/webview2/
+          EOF
+          echo "Package contents:"
+          ls -la Messina-Windows-VST3/
+
+      - name: Upload Windows package
+        uses: actions/upload-artifact@v4
+        with:
+          name: Messina-Windows-VST3-Package
+          path: Messina-Windows-VST3/
+          if-no-files-found: error

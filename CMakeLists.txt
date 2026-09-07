@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.22)
 
 project(Messina VERSION 0.0.1 LANGUAGES C CXX)
 
-# Point to local JUCE
+# Point to local JUCE (downloaded to GitHub/Libs/JUCE)
 add_subdirectory(../../Libs/JUCE JUCE)
 
 juce_add_plugin(Messina
@@ -15,7 +15,7 @@ juce_add_plugin(Messina
     COPY_PLUGIN_AFTER_BUILD TRUE
     PLUGIN_MANUFACTURER_CODE "Osme"
     PLUGIN_CODE "Mess"
-    FORMATS AU VST3 Standalone
+    FORMATS VST3 Standalone
     PRODUCT_NAME "Messina"
     BUNDLE_ID "com.osme.messina"
 )
@@ -57,33 +57,34 @@ target_compile_definitions(Messina
         JUCE_USE_CURL=0
 )
 
-# Copy ui.html to BOTH AU and VST3 plugin bundle Resources.
-# --- VST3 ---
-add_custom_command(TARGET Messina_VST3 POST_BUILD
-    COMMAND ${CMAKE_COMMAND} -E make_directory
-        "$<TARGET_BUNDLE_DIR:Messina_VST3>/Contents/Resources"
-    COMMAND ${CMAKE_COMMAND} -E copy
-        "${CMAKE_CURRENT_SOURCE_DIR}/Source/ui.html"
-        "$<TARGET_BUNDLE_DIR:Messina_VST3>/Contents/Resources/ui.html"
-    COMMAND ${CMAKE_COMMAND} -E make_directory
-        "$ENV{HOME}/Library/Audio/Plug-Ins/VST3/Messina.vst3/Contents/Resources"
-    COMMAND ${CMAKE_COMMAND} -E copy
-        "${CMAKE_CURRENT_SOURCE_DIR}/Source/ui.html"
-        "$ENV{HOME}/Library/Audio/Plug-Ins/VST3/Messina.vst3/Contents/Resources/ui.html"
-    COMMENT "Copying ui.html to VST3 bundle + installed location"
-)
+# Copy ui.html to plugin bundle Resources (macOS only)
+# Windows VST3 bundles don't need this - ui.html is embedded via binary data
+if(APPLE)
+    add_custom_command(TARGET Messina_VST3 POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E make_directory
+            "$<TARGET_BUNDLE_DIR:Messina_VST3>/Contents/Resources"
+        COMMAND ${CMAKE_COMMAND} -E copy
+            "${CMAKE_CURRENT_SOURCE_DIR}/Source/ui.html"
+            "$<TARGET_BUNDLE_DIR:Messina_VST3>/Contents/Resources/ui.html"
+        COMMAND ${CMAKE_COMMAND} -E make_directory
+            "$ENV{HOME}/Library/Audio/Plug-Ins/VST3/Messina.vst3/Contents/Resources"
+        COMMAND ${CMAKE_COMMAND} -E copy
+            "${CMAKE_CURRENT_SOURCE_DIR}/Source/ui.html"
+            "$ENV{HOME}/Library/Audio/Plug-Ins/VST3/Messina.vst3/Contents/Resources/ui.html"
+        COMMENT "Copying ui.html to VST3 bundle + installed location (macOS)"
+    )
 
-# --- AU ---
-add_custom_command(TARGET Messina_AU POST_BUILD
-    COMMAND ${CMAKE_COMMAND} -E make_directory
-        "$<TARGET_BUNDLE_DIR:Messina_AU>/Contents/Resources"
-    COMMAND ${CMAKE_COMMAND} -E copy
-        "${CMAKE_CURRENT_SOURCE_DIR}/Source/ui.html"
-        "$<TARGET_BUNDLE_DIR:Messina_AU>/Contents/Resources/ui.html"
-    COMMAND ${CMAKE_COMMAND} -E make_directory
-        "$ENV{HOME}/Library/Audio/Plug-Ins/Components/Messina.component/Contents/Resources"
-    COMMAND ${CMAKE_COMMAND} -E copy
-        "${CMAKE_CURRENT_SOURCE_DIR}/Source/ui.html"
-        "$ENV{HOME}/Library/Audio/Plug-Ins/Components/Messina.component/Contents/Resources/ui.html"
-    COMMENT "Copying ui.html to AU bundle + installed location"
-)
+    add_custom_command(TARGET Messina_AU POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E make_directory
+            "$<TARGET_BUNDLE_DIR:Messina_AU>/Contents/Resources"
+        COMMAND ${CMAKE_COMMAND} -E copy
+            "${CMAKE_CURRENT_SOURCE_DIR}/Source/ui.html"
+            "$<TARGET_BUNDLE_DIR:Messina_AU>/Contents/Resources/ui.html"
+        COMMAND ${CMAKE_COMMAND} -E make_directory
+            "$ENV{HOME}/Library/Audio/Plug-Ins/Components/Messina.component/Contents/Resources"
+        COMMAND ${CMAKE_COMMAND} -E copy
+            "${CMAKE_CURRENT_SOURCE_DIR}/Source/ui.html"
+            "$ENV{HOME}/Library/Audio/Plug-Ins/Components/Messina.component/Contents/Resources/ui.html"
+        COMMENT "Copying ui.html to AU bundle + installed location (macOS)"
+    )
+endif()
